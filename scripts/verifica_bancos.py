@@ -11,7 +11,7 @@ import os
 import json
 
 # Configuração do banco (ALTERE PARA SEUS DADOS REAIS)
-SERVER = 'SEU_SERVIDOR'  # Ex: 'MSSQLSERVER' ou 'localhost'
+SERVER = r'Vinicius\MSSQLSERVER01'   # Ex: 'MSSQLSERVER' ou 'localhost'
 DATABASE = 'CONTAGEH'
 DRIVER = '{SQL Server}'
 
