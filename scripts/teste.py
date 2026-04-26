@@ -1,39 +1,49 @@
 import winreg
 
-# Função recursiva para explorar o Registro (como árvore de pastas)
-def explorar_registro(chave_raiz, caminho, nivel=0):
+# COMANDO 1 - HKEY_CLASSES_ROOT (HKCR)
+# Associações de arquivos, extensões e CLSID
+print("=== HKCR - Primeiras 5 subpastas ===")
+chave1 = winreg.OpenKey(winreg.HKEY_CLASSES_ROOT, "")
+for i in range(5):
+    nome = winreg.EnumKey(chave1, i)
+    print(f"  📁 {nome}")
+winreg.CloseKey(chave1)
+
+# COMANDO 2 - HKEY_CURRENT_USER (HKCU)
+# Configurações do usuário atual (mais seguro de explorar)
+print("\n=== HKCU - Subpastas iniciais ===")
+chave2 = winreg.OpenKey(winreg.HKEY_CURRENT_USER, "")
+for i in range(5):
+    nome = winreg.EnumKey(chave2, i)
+    print(f"  📁 {nome}")
+winreg.CloseKey(chave2)
+
+# COMANDO 3 - HKEY_LOCAL_MACHINE (HKLM)
+# Configurações do sistema (cuidado: gigante!)
+print("\n=== HKLM - Subpastas iniciais ===")
+chave3 = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, "")
+for i in range(5):
+    nome = winreg.EnumKey(chave3, i)
+    print(f"  📁 {nome}")
+winreg.CloseKey(chave3)
+
+# COMANDO 4 - HKEY_USERS (HKU)
+# Perfis de todos usuários da máquina
+print("\n=== HKU - Subpastas (SIDs dos usuários) ===")
+chave4 = winreg.OpenKey(winreg.HKEY_USERS, "")
+for i in range(5):
+    nome = winreg.EnumKey(chave4, i)
+    print(f"  👤 {nome}")
+winreg.CloseKey(chave4)
+
+# COMANDO 5 - HKEY_CURRENT_CONFIG (HKCC)
+# Perfil de hardware atual
+print("\n=== HKCC - Subpastas ===")
+chave5 = winreg.OpenKey(winreg.HKEY_CURRENT_CONFIG, "")
+for i in range(5):
     try:
-        abre_chave = winreg.OpenKey(chave_raiz, caminho)
-        print("  " * nivel + f"📁 {caminho.split('\\')[-1] or caminho}")
-        
-        i = 0
-        while True:
-            try:
-                # Lista subpastas (recursivamente)
-                nome_subchave = winreg.EnumKey(abre_chave, i)
-                novo_caminho = f"{caminho}\\{nome_subchave}" if caminho else nome_subchave
-                explorar_registro(chave_raiz, novo_caminho, nivel + 1)
-                i += 1
-            except OSError:  # Sem mais subpastas
-                break
-        
-        # Lista arquivos (valores)
-        j = 0
-        while True:
-            try:
-                nome_valor, dado, tipo = winreg.EnumValue(abre_chave, j)
-                print("  " * (nivel + 1) + f"📄 {nome_valor} = {dado}")
-                j += 1
-            except OSError:  # Sem mais arquivos
-                break
-                
-        winreg.CloseKey(abre_chave)
+        nome = winreg.EnumKey(chave5, i)
+        print(f"  🔧 {nome}")
     except:
-        pass
-
-# Exemplo: explorar onde ficam os drivers ODBC
-explorar_registro(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\ODBC")
-
-
-
-
+        break
+winreg.CloseKey(chave5)
